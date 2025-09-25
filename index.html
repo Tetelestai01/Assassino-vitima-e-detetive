@@ -1,115 +1,130 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sorteio de Personagens</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      text-align: center;
-      padding: 20px;
-      background: #f0f4f8;
-    }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 20px;
-    }
-    button {
-      padding: 12px 20px;
-      margin: 10px;
-      font-size: 1rem;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    button:hover {
-      transform: scale(1.05);
-    }
-    #resultado {
-      margin-top: 20px;
-      font-size: 1.2rem;
-      min-height: 40px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jogo Assassino, Detetive e Vítima</title>
+<style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f0f4f8;
+    text-align: center;
+    padding: 20px;
+  }
+  h1 { margin-bottom: 20px; }
+  #resultado {
+    font-size: 1.3rem;
+    margin: 20px 0;
+    min-height: 40px;
+  }
+  button {
+    padding: 12px 20px;
+    margin: 10px;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  button:hover { transform: scale(1.05); }
+  #invisivelBtn { display: none; }
+</style>
 </head>
 <body>
-  <h1>Sorteio de Personagens</h1>
-  
-  <div>
-    <label>Escolha o número de participantes:</label><br>
-    <button onclick="iniciarSorteio(4)">4</button>
-    <button onclick="iniciarSorteio(5)">5</button>
-    <button onclick="iniciarSorteio(6)">6</button>
-    <button onclick="iniciarSorteio(7)">7</button>
-    <button onclick="iniciarSorteio(8)">8</button>
-  </div>
-  
-  <div>
-    <button id="sortearBtn" onclick="sortear()" disabled>Sorteiar Personagem</button>
-    <button onclick="resetar()">Resetar</button>
-  </div>
-  
-  <div id="resultado"></div>
-  <div>
-    <button id="invisivelBtn" onclick="ficarInvisivel()" style="display:none;">Ficar Invisível</button>
-  </div>
 
-  <script>
-    let personagens = [];
-    let sorteados = [];
-    let totalParticipantes = 0;
+<h1>Jogo Assassino, Detetive e Vítima</h1>
 
-    function iniciarSorteio(num) {
-      totalParticipantes = num;
-      sorteados = [];
-      personagens = [];
+<div>
+  <label>Escolha o número de participantes:</label><br>
+  <button onclick="iniciarSorteio(4)">4</button>
+  <button onclick="iniciarSorteio(5)">5</button>
+  <button onclick="iniciarSorteio(6)">6</button>
+  <button onclick="iniciarSorteio(7)">7</button>
+  <button onclick="iniciarSorteio(8)">8</button>
+</div>
 
-      // Definindo os personagens
-      personagens.push({tipo: 'Assassino', sorteado: false});
-      personagens.push({tipo: 'Detetive', sorteado: false});
-      
-      const vitimas = totalParticipantes - 2; // 1 assassino + 1 detetive = 2
-      for (let i = 0; i < vitimas; i++) {
-        personagens.push({tipo: 'Vitima', sorteado: false});
-      }
+<div>
+  <button id="sortearBtn" onclick="sortear()" disabled>Sorteiar Personagem</button>
+  <button onclick="resetar()">Resetar</button>
+</div>
 
-      document.getElementById('resultado').textContent = `Participantes prontos! Clique em "Sorteiar Personagem".`;
-      document.getElementById('sortearBtn').disabled = false;
-    }
+<div id="resultado"></div>
+<div>
+  <button id="invisivelBtn" onclick="ficarInvisivel()">Ficar Invisível</button>
+</div>
 
-    function sortear() {
-      const naoSorteados = personagens.filter(p => !p.sorteado);
-      if (naoSorteados.length === 0) {
-        document.getElementById('resultado').textContent = 'Todos os personagens foram sorteados!';
-        document.getElementById('sortearBtn').disabled = true;
-        return;
-      }
+<script>
+let personagens = [];
+let sorteados = [];
+let totalParticipantes = 0;
 
-      const indice = Math.floor(Math.random() * naoSorteados.length);
-      const personagemEscolhido = naoSorteados[indice];
-      personagemEscolhido.sorteado = true;
-      sorteados.push(personagemEscolhido);
+function iniciarSorteio(num) {
+  totalParticipantes = num;
+  sorteados = [];
+  personagens = [];
 
-      document.getElementById('resultado').textContent = `Personagem sorteado: ${personagemEscolhido.tipo}`;
-      document.getElementById('invisivelBtn').style.display = 'inline-block';
-      document.getElementById('sortearBtn').disabled = true;
-    }
+  // Criar personagens: 1 Assassino, 1 Detetive, resto Vítimas
+  personagens.push({tipo: 'Assassino', sorteado: false});
+  personagens.push({tipo: 'Detetive', sorteado: false});
+  const vitimas = totalParticipantes - 2;
+  for (let i = 0; i < vitimas; i++) {
+    personagens.push({tipo: 'Vítima', sorteado: false});
+  }
 
-    function ficarInvisivel() {
-      document.getElementById('resultado').textContent = 'Pronto! Próximo participante pode apertar o botão.';
-      document.getElementById('invisivelBtn').style.display = 'none';
-      document.getElementById('sortearBtn').disabled = false;
-    }
+  document.getElementById('resultado').textContent = 'Participantes prontos! Clique em "Sortear Personagem".';
+  document.getElementById('sortearBtn').disabled = false;
+}
 
-    function resetar() {
-      sorteados = [];
-      personagens.forEach(p => p.sorteado = false);
-      document.getElementById('resultado').textContent = 'Sistema resetado. Escolha novamente o número de participantes.';
-      document.getElementById('sortearBtn').disabled = true;
-      document.getElementById('invisivelBtn').style.display = 'none';
-    }
-  </script>
+function sortear() {
+  const naoSorteados = personagens.filter(p => !p.sorteado);
+  if (naoSorteados.length === 0) {
+    document.getElementById('resultado').textContent = 'Todos os personagens foram sorteados!';
+    document.getElementById('sortearBtn').disabled = true;
+    return;
+  }
+
+  const indice = Math.floor(Math.random() * naoSorteados.length);
+  const personagemEscolhido = naoSorteados[indice];
+  personagemEscolhido.sorteado = true;
+  sorteados.push(personagemEscolhido);
+
+  document.getElementById('resultado').textContent = `Personagem sorteado: ${personagemEscolhido.tipo}`;
+  document.getElementById('invisivelBtn').style.display = 'inline-block';
+  document.getElementById('sortearBtn').disabled = true;
+}
+
+function ficarInvisivel() {
+  document.getElementById('resultado').textContent = 'Pronto! Próximo participante pode apertar o botão.';
+  document.getElementById('invisivelBtn').style.display = 'none';
+  document.getElementById('sortearBtn').disabled = false;
+}
+
+function resetar() {
+  sorteados = [];
+  personagens.forEach(p => p.sorteado = false);
+  document.getElementById('resultado').textContent = 'Sistema resetado. Escolha novamente o número de participantes.';
+  document.getElementById('sortearBtn').disabled = true;
+  document.getElementById('invisivelBtn').style.display = 'none';
+}
+</script>
+
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
